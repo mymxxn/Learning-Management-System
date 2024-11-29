@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:learning_management_system/utils/hive_helper.dart';
 import 'package:learning_management_system/view/splash_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await HiveHelper.initHive();
+  HiveHelper.registerAdapter();
   runApp(const MyApp());
 }
 
