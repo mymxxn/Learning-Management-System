@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:learning_management_system/controller/login_provider.dart';
 import 'package:learning_management_system/utils/hive_helper.dart';
 import 'package:learning_management_system/utils/route_manager.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await HiveHelper.initHive();
   HiveHelper.registerAdapter();
-  runApp(const MyApp());
+  HiveHelper.openBox();
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(
+      create: (context) => LoginProvider(),
+    )
+  ], child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {

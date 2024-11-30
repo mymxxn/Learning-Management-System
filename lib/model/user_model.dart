@@ -4,23 +4,19 @@ part 'user_model.g.dart';
 @HiveType(typeId: 0)
 class UserModel {
   @HiveField(0)
-  final String firstName;
+  final String fullName;
 
   @HiveField(1)
-  final String lastName;
-
-  @HiveField(2)
   final String email;
 
-  @HiveField(3)
+  @HiveField(2)
   final String password;
 
-  @HiveField(4)
+  @HiveField(3)
   String? profilePicture;
 
   UserModel(
-      {required this.firstName,
-      required this.lastName,
+      {required this.fullName,
       required this.email,
       required this.password,
       this.profilePicture});

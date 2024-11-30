@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:learning_management_system/view/course_listing_screen.dart';
 import 'package:learning_management_system/view/forgot_password_screen.dart';
+import 'package:learning_management_system/view/home_screen.dart';
 import 'package:learning_management_system/view/login_screen.dart';
 import 'package:learning_management_system/view/signup_screen.dart';
 import 'package:learning_management_system/view/splash_screen.dart';
@@ -15,12 +16,12 @@ final router = GoRouter(initialLocation: '/', routes: [
   GoRoute(
     name: 'login',
     path: '/login',
-    builder: (context, state) => const LoginScreen(),
+    builder: (context, state) => LoginScreen(),
   ),
   GoRoute(
     name: 'signup',
     path: '/signup',
-    builder: (context, state) => const SignupScreen(),
+    builder: (context, state) => SignupScreen(),
   ),
   GoRoute(
     name: 'forgotpassword',
@@ -28,13 +29,8 @@ final router = GoRouter(initialLocation: '/', routes: [
     builder: (context, state) => const ForgotPasswordScreen(),
   ),
   GoRoute(
-    name: 'courselisting',
-    path: '/courselisting',
-    builder: (context, state) => const CourseListingScreen(),
-  ),
-  GoRoute(
-    name: 'userprofilemanagement',
-    path: '/userprofilemanagement',
-    builder: (context, state) => const UserProfileManagementScreen(),
+    name: 'home',
+    path: '/home',
+    builder: (context, state) => const HomeScreen(),
   ),
 ]);
