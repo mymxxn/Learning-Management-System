@@ -60,6 +60,10 @@ class LoginProvider extends ChangeNotifier {
         orElse: () => null,
       );
       if (user != null) {
+        SnackbarWidget.successSnackbar(
+            context: context, text: "Logged In Successfully");
+        clearData();
+
         router.go('/home');
       } else {
         SnackbarWidget.warningSnackbar(
