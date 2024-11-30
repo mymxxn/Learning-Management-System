@@ -6,7 +6,7 @@ class HiveHelper {
   static Box userBox = Hive.box(Constants.userBox);
   static initHive() async => Hive.initFlutter();
   static registerAdapter() {
-    // Hive.registerAdapter(());
+    Hive.registerAdapter(UserModelAdapter());
   }
 
   static openBox() => Hive.openBox(Constants.userBox);

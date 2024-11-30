@@ -42,6 +42,10 @@ class LoginProvider extends ChangeNotifier {
           fullName: fullNameController.text,
           email: emailController.text,
           password: passwordController.text));
+      SnackbarWidget.successSnackbar(
+          context: context, text: "User created Successfully");
+      clearData();
+      router.go('/login');
     } catch (e) {
       SnackbarWidget.errorSnackbar(context: context, text: "$e");
     }
