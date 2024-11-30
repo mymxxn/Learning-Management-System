@@ -5,6 +5,7 @@ import 'package:learning_management_system/model/user_model.dart';
 import 'package:learning_management_system/utils/hive_helper.dart';
 import 'package:learning_management_system/utils/route_manager.dart';
 import 'package:learning_management_system/utils/snackbar_widget.dart';
+import 'package:learning_management_system/utils/user_preferences.dart';
 
 class LoginProvider extends ChangeNotifier {
   TextEditingController fullNameController = TextEditingController();
@@ -16,11 +17,16 @@ class LoginProvider extends ChangeNotifier {
   initialDataLoading() {
     Future.delayed(Duration(seconds: 2)).then(
       (value) async {
-        bool existsUser = HiveHelper.userBox.isEmpty;
-        if (existsUser) {
-          router.go('/signup');
+        bool isLoggedIn = UserPreferences.getIsLoggedIn() ?? false;
+        if (isLoggedIn) {
+          router.go('/home');
         } else {
-          router.go('/login');
+          bool existsUser = HiveHelper.userBox.isEmpty;
+          if (existsUser) {
+            router.go('/signup');
+          } else {
+            router.go('/login');
+          }
         }
       },
     );
@@ -63,7 +69,7 @@ class LoginProvider extends ChangeNotifier {
         SnackbarWidget.successSnackbar(
             context: context, text: "Logged In Successfully");
         clearData();
-
+        UserPreferences.setIsLoggedIn(true);
         router.go('/home');
       } else {
         SnackbarWidget.warningSnackbar(

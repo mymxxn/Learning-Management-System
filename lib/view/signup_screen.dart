@@ -30,7 +30,11 @@ class _SignupScreenState extends State<SignupScreen> {
       child: Scaffold(
         appBar: HiveHelper.userBox.isNotEmpty
             ? AppBar(
-                leading: BackButton(),
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                leading: BackButton(
+                  onPressed: () => router.go('/login'),
+                ),
               )
             : null,
         backgroundColor: ConstantColor.primaryColor,

@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:learning_management_system/controller/login_provider.dart';
 import 'package:learning_management_system/utils/hive_helper.dart';
 import 'package:learning_management_system/utils/route_manager.dart';
+import 'package:learning_management_system/utils/user_preferences.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await UserPreferences.init();
   await HiveHelper.initHive();
   HiveHelper.registerAdapter();
   HiveHelper.openBox();
