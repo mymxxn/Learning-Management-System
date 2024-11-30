@@ -16,7 +16,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<LoginProvider>().initialDataLoading();
+    context.read<LoginProvider>().initialDataLoading(context);
   }
 
   @override

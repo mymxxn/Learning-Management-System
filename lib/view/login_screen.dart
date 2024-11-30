@@ -17,7 +17,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   late LoginProvider loginProvider;
-  final _formKey = GlobalKey<FormState>();
+  final loginFormKey = GlobalKey<FormState>();
   @override
   void initState() {
     super.initState();
@@ -29,7 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       backgroundColor: ConstantColor.primaryColor,
       body: Form(
-        key: _formKey,
+        key: loginFormKey,
         child: Stack(
           children: [
             Column(
@@ -48,6 +48,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         Image.asset(
                           ConstantImages.loginScreenImage,
                           scale: 5,
+                        ),
+                        Text(
+                          'Log in',
+                          style: TextStyle(fontSize: 16, color: Colors.black),
+                        ),
+                        SizedBox(
+                          height: 15,
                         ),
                         CommonWidgets.commonTextfield(
                           controller: loginProvider.emailController,
@@ -112,7 +119,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         Align(
                           alignment: Alignment.topRight,
                           child: TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                loginProvider.clearData();
+                                Navigator.pushNamed(context, '/forgotpassword');
+                              },
                               child: const Text(
                                 'Forget Password?',
                                 style: TextStyle(
@@ -126,7 +136,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         CommonWidgets.commonButton(
                             label: 'Log In',
                             ontap: () {
-                              if (_formKey.currentState!.validate()) {
+                              if (loginFormKey.currentState!.validate()) {
                                 loginProvider.login(context);
                               }
                             }),
@@ -150,7 +160,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     InkWell(
                         onTap: () {
                           loginProvider.clearData();
-                          router.go('/signup');
+                          Navigator.pushNamed(context, '/signup');
                         },
                         child: const Text(
                           ' Sign up',

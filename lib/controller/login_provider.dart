@@ -1,7 +1,9 @@
 import 'dart:developer';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:learning_management_system/model/user_model.dart';
+import 'package:learning_management_system/utils/firebase_helper.dart';
 import 'package:learning_management_system/utils/hive_helper.dart';
 import 'package:learning_management_system/utils/route_manager.dart';
 import 'package:learning_management_system/utils/snackbar_widget.dart';
@@ -14,19 +16,14 @@ class LoginProvider extends ChangeNotifier {
   TextEditingController confirmPasswordController = TextEditingController();
   bool visiblePassword = false;
   bool visiblePassword1 = false;
-  initialDataLoading() {
-    Future.delayed(Duration(seconds: 2)).then(
+  initialDataLoading(context) {
+    Future.delayed(const Duration(seconds: 2)).then(
       (value) async {
         bool isLoggedIn = UserPreferences.getIsLoggedIn() ?? false;
         if (isLoggedIn) {
-          router.go('/home');
+          Navigator.pushReplacementNamed(context, '/home');
         } else {
-          bool existsUser = HiveHelper.userBox.isEmpty;
-          if (existsUser) {
-            router.go('/signup');
-          } else {
-            router.go('/login');
-          }
+          Navigator.pushReplacementNamed(context, '/login');
         }
       },
     );
@@ -42,16 +39,20 @@ class LoginProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  signUp(BuildContext context) {
+  signUp(BuildContext context) async {
     try {
       HiveHelper.userBox.add(UserModel(
           fullName: fullNameController.text,
           email: emailController.text,
           password: passwordController.text));
+      await FirebaseHelper.firebaseAuth.createUserWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+      );
       SnackbarWidget.successSnackbar(
           context: context, text: "User created Successfully");
       clearData();
-      router.go('/login');
+      Navigator.pop(context);
     } catch (e) {
       SnackbarWidget.errorSnackbar(context: context, text: "$e");
     }
@@ -70,7 +71,7 @@ class LoginProvider extends ChangeNotifier {
             context: context, text: "Logged In Successfully");
         clearData();
         UserPreferences.setIsLoggedIn(true);
-        router.go('/home');
+        Navigator.pushReplacementNamed(context, '/home');
       } else {
         SnackbarWidget.warningSnackbar(
             context: context,
@@ -79,6 +80,21 @@ class LoginProvider extends ChangeNotifier {
       }
     } catch (e) {
       SnackbarWidget.errorSnackbar(context: context, text: "$e");
+    }
+  }
+
+  resetPassword(BuildContext context) async {
+    try {
+      await FirebaseHelper.firebaseAuth
+          .sendPasswordResetEmail(email: emailController.text);
+      SnackbarWidget.successSnackbar(
+          context: context, text: 'Password reset email sent.');
+      clearData();
+      Navigator.pop(context);
+    } catch (e) {
+      log('${e}');
+      SnackbarWidget.errorSnackbar(
+          context: context, text: 'Error: ${e.toString()}');
     }
   }
 
