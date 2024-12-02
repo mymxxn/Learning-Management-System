@@ -8,7 +8,8 @@ class CommonWidgets {
           required IconData icon,
           required FormFieldValidator validator,
           bool visiblePassword = false,
-          Widget? suffixIcon}) =>
+          Widget? suffixIcon,
+          bool isWhite = false}) =>
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -29,7 +30,7 @@ class CommonWidgets {
                     borderSide: BorderSide.none,
                     borderRadius: BorderRadius.circular(8)),
                 isCollapsed: true,
-                fillColor: ConstantColor.primaryColor,
+                fillColor: isWhite ? Colors.white : ConstantColor.primaryColor,
                 hintStyle: const TextStyle(
                     color: Colors.grey,
                     fontSize: 13,

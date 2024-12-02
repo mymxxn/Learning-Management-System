@@ -4,32 +4,59 @@ import 'package:http/http.dart' as http;
 import 'package:learning_management_system/model/course_model.dart';
 
 class CourseProvider with ChangeNotifier {
-   final TextEditingController searchController = TextEditingController();
-  List<CourseModel> _courses = [];
+  final TextEditingController searchController = TextEditingController();
+  List<CourseModel> courses = [];
+  List<CourseModel> filteredCourses = [];
   List<CourseModel> _bookmarkedCourses = [];
-  bool _isLoading = false;
+  bool isLoading = false;
 
-  List<CourseModel> get courses => _courses;
   List<CourseModel> get bookmarkedCourses => _bookmarkedCourses;
-  bool get isLoading => _isLoading;
+  int pageNumber = 1;
+
+  updatePage() {
+    pageNumber++;
+    notifyListeners();
+  }
+
+  sortCourses(String val) {
+    filteredCourses = courses
+        .where(
+          (element) =>
+              (element.name ?? '').toLowerCase().contains(val.toLowerCase()),
+        )
+        .toList();
+    notifyListeners();
+  }
 
   Future<void> fetchCourses() async {
+    isLoading = true;
     notifyListeners();
 
     final url = Uri.parse(
-        'https://api.example.com/courses?search=${searchController.text}'); // Replace with actual API
+        'https://courses.edx.org/api/courses/v1/courses/?page=${pageNumber}&page_size=20');
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
-        final data = json.decode(response.body) as List;
-        _courses = data.map((json) => CourseModel.fromJson(json)).toList();
+        final data = json.decode(response.body) as Map<String, dynamic>;
+        final results = data['results'] as List<dynamic>;
+        if (pageNumber == 1) {
+          courses = results.map((json) => CourseModel.fromJson(json)).toList();
+        } else {
+          courses.addAll(
+              results.map((json) => CourseModel.fromJson(json)).toList());
+        }
+        filteredCourses = courses;
+        if (searchController.text.isNotEmpty) {
+          sortCourses(searchController.text);
+        }
+        notifyListeners();
       } else {
         throw Exception('Failed to load courses');
       }
     } catch (error) {
       print(error);
     } finally {
-      _isLoading = false;
+      isLoading = false;
       notifyListeners();
     }
   }

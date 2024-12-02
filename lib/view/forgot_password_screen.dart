@@ -36,100 +36,101 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       ),
       backgroundColor: ConstantColor.primaryColor,
       body: Form(
-        key: forgotPasswordformKey,
-        child: Stack(
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 15),
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.white),
-                  child: SingleChildScrollView(
-                    child: Column(
+          key: forgotPasswordformKey,
+          child: SizedBox(
+              height: double.infinity,
+              width: double.infinity,
+              child: Center(
+                child: ListView(
+                  shrinkWrap: true,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 15),
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.white),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            Image.asset(
+                              ConstantImages.loginScreenImage,
+                              scale: 5,
+                            ),
+                            Text(
+                              'Forgot Password',
+                              style:
+                                  TextStyle(fontSize: 16, color: Colors.black),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            CommonWidgets.commonTextfield(
+                              controller: loginProvider.emailController,
+                              label: 'Email',
+                              icon: Icons.email_outlined,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Email is required';
+                                }
+                                String pattern =
+                                    r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
+                                if (!RegExp(pattern).hasMatch(value)) {
+                                  return 'Enter a valid email address';
+                                }
+                                return null;
+                              },
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Text(
+                              'Provide your email address to reset password.',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                            const SizedBox(
+                              height: 25,
+                            ),
+                            CommonWidgets.commonButton(
+                                label: 'Reset Password',
+                                ontap: () {
+                                  if (forgotPasswordformKey.currentState!
+                                      .validate()) {
+                                    loginProvider.resetPassword(context);
+                                  }
+                                }),
+                            const SizedBox(
+                              height: 25,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.asset(
-                          ConstantImages.loginScreenImage,
-                          scale: 5,
-                        ),
-                        Text(
-                          'Forgot Password',
-                          style: TextStyle(fontSize: 16, color: Colors.black),
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        CommonWidgets.commonTextfield(
-                          controller: loginProvider.emailController,
-                          label: 'Email',
-                          icon: Icons.email_outlined,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Email is required';
-                            }
-                            String pattern =
-                                r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
-                            if (!RegExp(pattern).hasMatch(value)) {
-                              return 'Enter a valid email address';
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Text(
-                          'Provide your email address to reset password.',
+                        const Text(
+                          'Want to go Back',
                           style: TextStyle(color: Colors.grey),
                         ),
-                        const SizedBox(
-                          height: 25,
-                        ),
-                        CommonWidgets.commonButton(
-                            label: 'Reset Password',
-                            ontap: () {
-                              if (forgotPasswordformKey.currentState!
-                                  .validate()) {
-                                loginProvider.resetPassword(context);
-                              }
-                            }),
-                        const SizedBox(
-                          height: 25,
-                        ),
+                        InkWell(
+                            onTap: () {
+                              loginProvider.clearData();
+                              Navigator.pop(context);
+                            },
+                            child: const Text(
+                              ' Sign In',
+                              style: TextStyle(color: Colors.black),
+                            ))
                       ],
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      'Want to go Back',
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                    InkWell(
-                        onTap: () {
-                          loginProvider.clearData();
-                          Navigator.pop(context);
-                        },
-                        child: const Text(
-                          ' Sign In',
-                          style: TextStyle(color: Colors.black),
-                        ))
+                    )
                   ],
-                )
-              ],
-            ),
-          ],
-        ),
-      ),
+                ),
+              ))),
     );
   }
 }

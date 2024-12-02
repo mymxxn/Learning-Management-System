@@ -7,9 +7,9 @@ class Constants {
 class ConstantColor {
   static const Color primaryColor = Color.fromARGB(255, 245, 249, 250);
   static const Color buttonRed = Color.fromARGB(255, 236, 82, 82);
-  static const Color logoPrimary = Color.fromARGB(255, 198,93,162);
-  static const Color logoSecondary = Color.fromARGB(255, 131,29,98);
-
+  static const Color logoPrimary = Color.fromARGB(255, 198, 93, 162);
+  static const Color logoSecondary = Color.fromARGB(255, 131, 29, 98);
+  static const Color profileBlue = Color.fromARGB(255, 74, 168, 212);
 }
 
 class ConstantImages {

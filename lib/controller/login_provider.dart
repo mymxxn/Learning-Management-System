@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:learning_management_system/model/user_model.dart';
@@ -41,6 +42,7 @@ class LoginProvider extends ChangeNotifier {
 
   signUp(BuildContext context) async {
     try {
+      await HiveHelper.openBox();
       HiveHelper.userBox.add(UserModel(
           fullName: fullNameController.text,
           email: emailController.text,
@@ -54,30 +56,53 @@ class LoginProvider extends ChangeNotifier {
       clearData();
       Navigator.pop(context);
     } catch (e) {
+      log('$e');
       SnackbarWidget.errorSnackbar(context: context, text: "$e");
     }
   }
 
-  login(BuildContext context) {
+  login(BuildContext context) async {
     try {
+      await FirebaseHelper.firebaseAuth.signInWithEmailAndPassword(
+          email: emailController.text, password: passwordController.text);
+
       final user = HiveHelper.userBox.values.firstWhere(
-        (user) =>
-            user.email == emailController.text &&
-            user.password == passwordController.text,
+        (user) => user.email == emailController.text.trim(),
         orElse: () => null,
       );
       if (user != null) {
-        SnackbarWidget.successSnackbar(
-            context: context, text: "Logged In Successfully");
-        clearData();
-        UserPreferences.setIsLoggedIn(true);
-        Navigator.pushReplacementNamed(context, '/home');
-      } else {
-        SnackbarWidget.warningSnackbar(
-            context: context,
-            text:
-                "There is no User with this email, Please check Email or Password");
+        if (user.password != passwordController.text.trim()) {
+          user.password = passwordController.text.trim();
+          await user.save(); // Save changes to Hive
+        }
       }
+      SnackbarWidget.successSnackbar(
+          context: context, text: "Logged In Successfully");
+
+      UserPreferences.setUserEmail(emailController.text);
+      UserPreferences.setUserPassword(passwordController.text);
+      clearData();
+      UserPreferences.setIsLoggedIn(true);
+
+      Navigator.pushReplacementNamed(context, '/home');
+    } on FirebaseAuthException catch (e) {
+      String errorMessage = '';
+      switch (e.code) {
+        case 'user-not-found':
+          errorMessage = "No user found for this email.";
+          break;
+        case 'wrong-password':
+          errorMessage = "Incorrect password.";
+          break;
+        case 'invalid-email':
+          errorMessage = "The email address is not valid.";
+          break;
+        case 'invalid-credential':
+          errorMessage = "The provided credentials are invalid";
+        default:
+          errorMessage = "Login failed: ${e.message}";
+      }
+      SnackbarWidget.errorSnackbar(context: context, text: errorMessage);
     } catch (e) {
       SnackbarWidget.errorSnackbar(context: context, text: "$e");
     }

@@ -29,22 +29,25 @@ class _SplashScreenState extends State<SplashScreen> {
               ConstantImages.splashScreen,
               fit: BoxFit.fill,
             ),
-            // Align(
-            //   alignment: Alignment.bottomCenter,
-            //   child: SpinKitThreeBounce(size: 20,
-            //     itemBuilder: (BuildContext context, int index) {
-            //       return DecoratedBox(
-            //         position: DecorationPosition.background,
-            //         decoration: BoxDecoration(
-            //           shape: BoxShape.circle,
-            //           color: index.isEven
-            //               ? ConstantColor.logoPrimary
-            //               : ConstantColor.logoSecondary,
-            //         ),
-            //       );
-            //     },
-            //   ),
-            // )
+            Positioned(
+              bottom: 50,
+              left: 0,
+              right: 0,
+              child: SpinKitThreeBounce(
+                size: 20,
+                itemBuilder: (BuildContext context, int index) {
+                  return DecoratedBox(
+                    position: DecorationPosition.background,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: index.isEven
+                          ? ConstantColor.logoPrimary
+                          : ConstantColor.logoSecondary,
+                    ),
+                  );
+                },
+              ),
+            )
           ],
         ));
   }

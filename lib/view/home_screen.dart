@@ -2,8 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:learning_management_system/utils/constants.dart';
-import 'package:learning_management_system/view/course_listing_screen.dart';
-import 'package:learning_management_system/view/user_profile_management_screen.dart';
+import 'package:learning_management_system/view/course%20listing/course_listing_screen.dart';
+import 'package:learning_management_system/view/user%20profile%20management/user_profile_management_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -16,8 +16,8 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
-    CourseListingScreen(),
-    UserProfileManagementScreen()
+    const CourseListingScreen(),
+    const UserProfileManagementScreen()
   ];
 
   void _onItemTapped(int index) {
@@ -41,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ConstantImages.logo,
               scale: 8,
             ),
-            Text(
+            const Text(
               'academy',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             )
@@ -65,8 +65,8 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
-        selectedItemColor: Color.fromARGB(255, 0, 0, 0),
-        unselectedItemColor: Color.fromARGB(255, 105, 105, 105),
+        selectedItemColor: const Color.fromARGB(255, 0, 0, 0),
+        unselectedItemColor: const Color.fromARGB(255, 105, 105, 105),
       ),
     );
   }
